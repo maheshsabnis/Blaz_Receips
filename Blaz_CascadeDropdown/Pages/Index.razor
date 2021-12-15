@@ -1,0 +1,71 @@
+﻿@page "/"
+@using Blaz_CascadeDropdown.Models;
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="container">
+   <EditForm Model="@state">
+
+     
+    <div class="form-control">
+        <label>Select State</label>
+        <InputSelect  class="form-control"
+         Value="@StateName" ValueExpression="@(()=>StateName)"
+           ValueChanged="@((string name)=>SelectState(name))">
+            @foreach(var state in lstStates)
+            {
+                <option value="@state.StateName">@state.StateName</option>
+            }
+        </InputSelect>
+        <hr/>
+        <div class="container">
+             <strong>
+                 Selected State : @selectedState
+             </strong>
+        </div>
+        <br/> 
+         <label>Cities in Selected State</label>
+        <InputSelect @bind-Value="@CityName" class="form-control">
+            @foreach(var city in lstFilteredCities)
+            {
+                <option value="@city.CityId">@city.CityName</option>
+            }
+        </InputSelect>
+    </div>
+    </EditForm>
+</div>
+
+@code{
+
+    private string? StateName { get; set; }
+    private string? CityName;
+    private List<State>? lstStates= null;
+    private List<City>? lstCities = null;
+    private State? state = null;
+    private string? selectedState;
+    private List<City>? lstFilteredCities = null;
+
+    protected override void OnInitialized()
+    {
+        state = new State();
+        lstStates = new States();
+        lstCities = new Cities();
+        lstFilteredCities = new List<City>();
+        lstFilteredCities = lstCities;
+        base.OnInitialized();
+    }
+
+    void SelectState(string name)
+    {
+        StateName = name;
+        selectedState = StateName;
+        // get the StateId from the Name
+         int id = lstStates.Where(s=>s.StateName==name).FirstOrDefault().StateId;
+        lstFilteredCities = lstCities.Where(c => c.StateId == id).ToList();
+    }
+}

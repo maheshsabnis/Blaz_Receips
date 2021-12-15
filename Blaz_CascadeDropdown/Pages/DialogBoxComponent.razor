@@ -1,0 +1,49 @@
+﻿@page "/city"
+@using Blaz_CascadeDropdown.Models;
+
+<h3>City Master</h3>
+<div class="container">
+    <EditForm Model="@city">
+        <div class="form-group">
+            <label>City Id</label>
+            <InputNumber class="form-control" @bind-Value="city.CityId"></InputNumber>
+        </div>
+        <div class="form-group">
+            <label>City Name</label>
+            <InputText class="form-control" @bind-Value="@city.CityName"></InputText>
+        </div>
+         <div class="form-group">
+            <label>State Name</label>
+            <InputSelect class="form-control" @bind-Value="@city.StateId">
+                @foreach(var state in lstStates)
+                {
+                 <option value="@state.StateId"> @state.StateName</option>   
+                }
+            </InputSelect>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public City city { get; set; }
+  //  [Parameter] public EventCallback<City> OnCitySelected { get; set; }
+    private States? lstStates;
+
+
+    protected override void OnInitialized()
+    {
+        // city = new City();
+        lstStates = new States();
+        base.OnInitialized();
+    }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    lstStates = new States();
+    //   // await OnCitySelected.InvokeAsync(city);
+    //   // return base.OnInitializedAsync();
+    //}
+
+
+}

@@ -1,0 +1,108 @@
+﻿@page "/pagination"
+@using Blaz_CascadeDropdown.Models;
+<h3>TablePagination</h3>
+
+<div class="container">
+    
+    <EditForm Model="@city">
+        <div class="form-group">
+            <label>Select Number of Records To View Per Page</label>
+            <InputSelect class="form-control" ValueExpression="@(()=>recordsPerPage)"
+                Value="@recordsPerPage"
+                 ValueChanged="@((int pg)=>changedPages(pg))">
+               @foreach (var item in records)
+               {
+                 <option value="@item">@item</option>    
+               }
+            </InputSelect>
+        </div>
+   <div class="container" style="height:500px;overflow:auto">
+     <table class="table table-bordered table-striped table-dark">
+        <thead>
+            <tr>
+                <td>
+                    City Id
+                </td>
+                <td>
+                    City Name
+                </td>
+                <td>
+                    State Id
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+           @foreach (var city in FilteredCities)
+            {
+                <tr>
+                    <td>@city.CityId</td>
+                    <td>@city.CityName</td>
+                    <td>@city.StateId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+   </EditForm>
+  
+    <br/>
+    <nav aria-label="navigation">
+        <ul class="pagination justify-content-center">
+             @foreach(var pageInfo in paging)
+             {
+               <li class="page-item c@pgIndex"
+                  @onclick="@(()=>selectPage(pageInfo.LinkText))"><a class="page-link" href="/pagination">@pageInfo.PageId</a></li>
+             }
+        </ul>
+    </nav>
+</div>
+
+@code {
+    private Cities? cities;
+    private City? city;
+    private int[]records  = new int[]{1,5,10,15,20,25,30,35,40};
+    private int recordsPerPage = 0;
+    private int pages = 0;
+    private int index = 0;
+    private Pagination? pagination;
+    private List<Paging>? paging;
+    private List<City>? FilteredCities;
+    int recs = 0;
+    protected override void OnInitialized()
+    {
+        cities = new Cities();
+        city = new City();
+        pagination = new Pagination(); 
+        paging = new List<Paging>();
+        FilteredCities = new Cities();
+        FilteredCities = cities;
+        base.OnInitialized();
+    }
+
+    void changedPages(int pg)
+    {
+        paging = new List<Paging>();
+        recordsPerPage = pg;
+        // select the number of pages to be displayed
+        if (cities?.Count >= recordsPerPage)
+        {
+            pages = pagination.PageCount(cities.Count, recordsPerPage); 
+        }
+        // Generate Pagination
+        for (int i = 0; i <= pages; i++)
+        {
+            paging.Add(new Paging(i,i.ToString()));
+        }
+        // Filter records based on the selected recordPerPage
+        FilteredCities = cities.Take(recordsPerPage)
+                           .ToList<City>();     
+    }
+    // Start Pagination 
+    void selectPage(string pg)
+    {
+        recs = recordsPerPage * int.Parse(pg);
+        FilteredCities = cities.Skip(recs).Take(recordsPerPage)
+                           .ToList<City>();    
+        recs = 0;
+    }
+}

@@ -1,0 +1,86 @@
+﻿@page "/details"
+@using Blaz_CascadeDropdown.Models;
+<h3>City Details Component</h3>
+
+<div class="container">
+    <table class="table table-bordered table-striped table-dark">
+        <thead>
+            <tr>
+                <td>
+                    City Id
+                </td>
+                <td>
+                    City Name
+                </td>
+                <td>
+                    State Id
+                </td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+           @foreach (var city in cities)
+           {
+             <tr>
+                 <td>@city.CityId</td>
+                 <td>@city.CityName</td>
+                 <td>@city.StateId</td>
+                  <td>
+                      <input type="button" value="Show" class="btn btn-warning" @onclick="@(()=>showCityDialog(city))"/>
+                  </td>
+             </tr>    
+           }
+        </tbody>
+    </table>
+    <br/>
+
+@if (ShowDialog)  
+{  
+  
+<div class="modal fade show d-block" id="cityModal" tabindex="-1" role="dialog">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+            <div class="modal-header">  
+                <h5 class="modal-title" id="lbl">Add City</h5>  
+                <button type="button" class="close" @onclick="hideCityDialog"  data-dismiss="modal" aria-label="Close">  
+                    <span aria-hidden="true">X</span>  
+                </button>  
+            </div>  
+            <div class="modal-body">  
+                  <DialogBoxComponent city="city"></DialogBoxComponent>
+            </div>  
+             <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Update</button>
+                <button type="button" class="btn btn-secondary" @onclick="hideCityDialog" data-dismiss="modal">Close</button>
+            </div>
+        </div>  
+    </div>  
+</div>  
+} 
+
+
+    
+</div>
+
+@code {
+    private Cities cities;
+    private bool ShowDialog = false;
+    private City city;
+    protected override void OnInitialized()
+    {
+        cities = new Cities();
+        city = new City();
+        base.OnInitialized();
+    }
+
+
+    void showCityDialog(City c)
+    {
+        ShowDialog = true;
+        city = c;
+    }
+    void hideCityDialog()
+    {
+        ShowDialog = false;    
+    }
+}
