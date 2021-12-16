@@ -1,0 +1,145 @@
+﻿@page "/serverpagination"
+@using Blaz_CascadeDropdown.Models;
+@inject Blaz_CascadeDropdown.Models.ClientService Client;
+<h3>Server-Side Table Pagination</h3>
+
+<div class="container">
+    <EditForm Model="@product">
+        <div class="form-group">
+            <label>Select Number of Records To View Per Page</label>
+            <InputSelect class="form-control" ValueExpression="@(()=>recordsPerPage)"
+                Value="@recordsPerPage"
+                 ValueChanged="@((int pg)=>changedPages(pg))">
+               @foreach (var item in records)
+               {
+                 <option value="@item">@item</option>    
+               }
+            </InputSelect>
+        </div>
+   <div class="container" style="height:500px;overflow:auto">
+     <table class="table table-bordered table-striped table-dark">
+        <thead>
+            <tr>
+                <td>
+                    Product Row Id
+                </td>
+                <td>
+                    Product Id
+                </td>
+                <td>
+                    Product Name
+                </td>
+                <td>
+                    Category Name
+                </td>
+                <td>
+                    Manufacturer
+                </td>
+                <td>
+                    Description
+                </td>
+                <td>
+                    Base Price
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+           @foreach (var prd in FilteredProducts)
+            {
+                <tr>
+                    <td>@prd.ProductRowId</td>
+                    <td>@prd.ProductId</td>
+                    <td>@prd.ProductName</td>
+                    <td>@prd.CategoryName</td>
+                    <td>@prd.Manufacturer</td>
+                    <td>@prd.Description</td>
+                    <td>@prd.BasePrice</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+   </EditForm>
+  
+    <br/>
+    <nav aria-label="navigation">
+        <ul class="pagination justify-content-center">
+             @foreach(var pageInfo in paging)
+             {
+               <li class="page-item c@pgIndex"
+                  @onclick="@(()=>selectPage(pageInfo.LinkText))"><a class="page-link" href="/serverpagination">@pageInfo.PageId</a></li>
+             }
+        </ul>
+    </nav>
+    <hr/>
+    <div class="container">
+        @ErrorMessage
+    </div>
+</div>
+
+@code {
+    private List<Product>? Products;
+    private Product? product;
+    private int[]records  = new int[]{1,5,10,15,20,25,30,35,40};
+    private int recordsPerPage = 0;
+    private int pages = 0;
+    private int index = 0;
+    private Pagination? pagination;
+    private List<Paging>? paging;
+    private List<Product>? FilteredProducts;
+    int recs = 0;
+    private string ErrorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = new List<Product>();
+        product = new Product(); 
+        paging = new List<Paging>();
+        FilteredProducts = new List<Product>();
+        pagination = new Pagination();
+        Products = await Client.GetAsync(0, 0);
+
+        FilteredProducts = Products;
+
+        // return base.OnInitializedAsync();
+    }
+
+    async Task changedPages(int pg)
+    {
+        try
+        {
+            paging = new List<Paging>();
+            recordsPerPage = pg;
+            pages = pagination.PageCount(Products.Count, recordsPerPage);
+
+            // Generate Pagination
+            for (int i = 0; i <= pages; i++)
+            {
+                paging.Add(new Paging(i, i.ToString()));
+            }
+
+            // Filter records based on the selected recordPerPage
+            FilteredProducts = await Client.GetAsync(recordsPerPage, 0);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;    
+        }
+
+
+    }
+    // Start Pagination 
+    async Task selectPage(string pg)
+    {
+        try
+        {
+            recs = recordsPerPage * int.Parse(pg);
+            FilteredProducts = await Client.GetAsync(recordsPerPage, recs);
+            recs = 0;
+         }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;    
+        }
+    }
+}
