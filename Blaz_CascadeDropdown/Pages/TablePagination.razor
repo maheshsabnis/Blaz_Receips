@@ -1,15 +1,15 @@
 ﻿@page "/pagination"
 @using Blaz_CascadeDropdown.Models;
-<h3>TablePagination</h3>
+
+<h3>Table Pagination</h3>
 
 <div class="container">
-    
     <EditForm Model="@city">
         <div class="form-group">
             <label>Select Number of Records To View Per Page</label>
             <InputSelect class="form-control" ValueExpression="@(()=>recordsPerPage)"
                 Value="@recordsPerPage"
-                 ValueChanged="@((int pg)=>changedPages(pg))">
+                 ValueChanged="@((int pg)=>changePages(pg))">
                @foreach (var item in records)
                {
                  <option value="@item">@item</option>    
@@ -79,7 +79,7 @@
         base.OnInitialized();
     }
 
-    void changedPages(int pg)
+    void changePages(int pg)
     {
         paging = new List<Paging>();
         recordsPerPage = pg;
@@ -103,6 +103,7 @@
         recs = recordsPerPage * int.Parse(pg);
         FilteredCities = cities.Skip(recs).Take(recordsPerPage)
                            .ToList<City>();    
+        // reset the record count 
         recs = 0;
     }
 }

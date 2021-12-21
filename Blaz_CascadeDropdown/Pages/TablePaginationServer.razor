@@ -9,7 +9,7 @@
             <label>Select Number of Records To View Per Page</label>
             <InputSelect class="form-control" ValueExpression="@(()=>recordsPerPage)"
                 Value="@recordsPerPage"
-                 ValueChanged="@((int pg)=>changedPages(pg))">
+                 ValueChanged="@((int pg)=>changePages(pg))">
                @foreach (var item in records)
                {
                  <option value="@item">@item</option>    
@@ -104,7 +104,7 @@
         // return base.OnInitializedAsync();
     }
 
-    async Task changedPages(int pg)
+    async Task changePages(int pg)
     {
         try
         {

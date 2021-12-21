@@ -107,18 +107,4 @@
 
         }
     }
-
-    public class Occupation
-    {
-        public List<string> GetOccupations()
-        {
-            var occupations = new List<string>()
-            {
-                "Employed",
-                "Self-Employed"
-            };
-            return occupations;
-        }
-    }
-
 }

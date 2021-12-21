@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using APIService.Models;
 using Microsoft.AspNetCore.Mvc;
-using APIService.Models;
 namespace APIService.Controllers
 {
     [Route("api/[controller]")]

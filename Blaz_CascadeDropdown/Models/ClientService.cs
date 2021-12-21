@@ -1,8 +1,4 @@
-﻿using System.Net.Http;
-using System.Collections.Generic;
-using System.Net.Http.Json;
-
-
+﻿using System.Net.Http.Json;
 namespace Blaz_CascadeDropdown.Models
 {
     public class ClientService
