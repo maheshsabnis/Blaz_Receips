@@ -1,0 +1,14 @@
+﻿<h3>AnotherChildComponent</h3>
+
+<p>@SomeValue</p>
+
+@code {
+    [CascadingParameter] string SomeValue { get; set; }
+    
+    [Parameter] public Action<string> OnSomeValueChanged { get; set; }
+
+    private void ChangeValue()
+    {
+        OnSomeValueChanged?.Invoke("New Value");
+    }
+}

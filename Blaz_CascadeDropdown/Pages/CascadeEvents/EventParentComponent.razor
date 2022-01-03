@@ -1,0 +1,14 @@
+﻿@page "/eventparent"
+<h3>EventParentComponent</h3>
+
+<CascadingValue Value="@SomeValue">
+    <ChildComponent></ChildComponent>
+</CascadingValue>
+
+@*<CascadingValue Value="@SomeValue">
+    <ChildComponent></ChildComponent>
+<CascadingValue>
+    *@
+@code {
+    string SomeValue { get; set; } = "Initial Value";
+}

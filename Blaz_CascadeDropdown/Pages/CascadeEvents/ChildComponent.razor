@@ -1,0 +1,14 @@
+﻿<h3>ChildComponent</h3>
+
+@*<AnotherChildComponent @OnSomeValueChanged="ChangeValue"><AnotherChildComponent>*@
+
+ <AnotherChildComponent OnChildSomeValueChanged="ChangeValue"></AnotherChildComponent>
+
+@code {    
+    [Parameter] public Action<string> OnChildSomeValueChanged { get; set; }
+
+    private void ChangeValue(string newValue)
+    {
+        OnChildSomeValueChanged?.Invoke(newValue);
+    }
+}

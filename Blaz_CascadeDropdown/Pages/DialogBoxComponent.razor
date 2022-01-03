@@ -27,23 +27,12 @@
 @code {
     [Parameter]
     public City city { get; set; }
-  //  [Parameter] public EventCallback<City> OnCitySelected { get; set; }
     private States? lstStates;
 
 
     protected override void OnInitialized()
     {
-        // city = new City();
         lstStates = new States();
         base.OnInitialized();
     }
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    lstStates = new States();
-    //   // await OnCitySelected.InvokeAsync(city);
-    //   // return base.OnInitializedAsync();
-    //}
-
-
 }

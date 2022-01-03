@@ -1,0 +1,25 @@
+﻿@page "/cascadeparameter"
+
+<h1 style="@Color">Parent Component Text</h1>
+<h3>@Message</h3>
+<input type="button" value="Update Value" @onclick="updateMessage"/>
+
+<CascadingValue Value="@Color">
+ <CascadingValue Value="@Technologies">
+   <CascadingValue Value="@Message" Name="msg">
+    <ChildComponent>
+    </ChildComponent>
+   </CascadingValue>
+   </CascadingValue>
+</CascadingValue>
+
+@code {
+    public string Color { get; set; } = "color:red";
+    public List<string> Technologies { get; set; } = new List<string>() { "Java", ".NET", "PHP", "Node.js", "Angular", "React.js" };
+    public string Message { get; set; } = "Hello";
+
+     void updateMessage()
+    {
+        Message = "I am New Message";
+    }
+}

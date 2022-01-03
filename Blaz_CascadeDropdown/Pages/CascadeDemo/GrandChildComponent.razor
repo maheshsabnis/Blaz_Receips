@@ -1,0 +1,29 @@
+﻿<h1 style="@ElementStyle">--Grand Child Component Text</h1>
+
+<ol>
+    @foreach(var t in dataTech)
+    {
+        <li>@t</li>
+    }
+</ol>
+<hr/>
+<div>
+    <strong>
+        Value Received from the Parent : @receivedMessage
+    </strong>
+    <input type="button" value="Update Value" @onclick="updateMessage"/>
+</div>
+
+@code {
+    [CascadingParameter]
+    public string ElementStyle { get; set; }
+    [CascadingParameter]
+    public List<string> dataTech { get; set; } = new List<string>();
+    [CascadingParameter(Name ="msg")]
+    public string receivedMessage { get; set; }
+
+    void updateMessage()
+    {
+        receivedMessage = "I am New Message";
+    }
+}
