@@ -1,8 +1,9 @@
 ﻿@page "/pets3"
-
+@using System.Text.Json
+@inject IJSRuntime JsRuntime
 <h1>Pets</h1>
 
-<TableRenderTemplate Items="pets">
+<TableRenderTemplate Items="pets" OnRowSelected=@receiveEmployee>
     <TableHeader>
         <th>ID</th>
         <th>Name</th>
@@ -25,5 +26,10 @@
     {
         public int PetId { get; set; }
         public string? Name { get; set; }
+    }
+
+    async Task receiveEmployee(object data)
+    {
+         await JsRuntime.InvokeVoidAsync("alert", $"To Caller Component Warning! {JsonSerializer.Serialize(data)}");
     }
 }

@@ -1,5 +1,7 @@
 ﻿@typeparam TItem
 @using System.Diagnostics.CodeAnalysis
+@using System.Text.Json
+@inject IJSRuntime JsRuntime
 
 <table class="table">
     <thead>
@@ -10,7 +12,7 @@
         {
             if (RowTemplate is not null)
             {
-                <tr>@RowTemplate(item)</tr>
+                <tr @onclick="@(()=>OnRowClick(item))">@RowTemplate(item)</tr>
             }
         }
     </tbody>
@@ -25,4 +27,13 @@
 
     [Parameter, AllowNull]
     public IReadOnlyList<TItem> Items { get; set; }
+
+    [Parameter] 
+    public EventCallback<object> OnRowSelected { get; set; }
+
+    async Task OnRowClick(object item)
+    {
+        await JsRuntime.InvokeVoidAsync("alert", $"Warning! {JsonSerializer.Serialize(item)}");
+        await OnRowSelected.InvokeAsync(item); 
+    }
 }
