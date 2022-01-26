@@ -1,0 +1,21 @@
+﻿@page "/raiseerror"
+<h3>Raise Error Component</h3>
+<div class="container">
+    <strong>
+        @currentCount
+    </strong>
+</div>
+<button class="btn btn-success" @onclick="IncrementCount">Counter</button>
+
+@code {
+private int currentCount = 0;
+private void IncrementCount()
+{
+    currentCount++;
+
+    if (currentCount > 5)
+    {
+        throw new InvalidOperationException("Current count is too big!");
+    }
+}
+}

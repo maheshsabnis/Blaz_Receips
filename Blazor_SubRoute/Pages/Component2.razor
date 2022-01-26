@@ -1,0 +1,10 @@
+﻿@page "/c2"
+@inject IJSRuntime js
+<h3>Component2</h3>
+<input type="button" value="click" @onclick="click"/>
+@code {
+    async Task click()
+    {
+        await js.InvokeVoidAsync("alert", "ddd");
+    }
+}
